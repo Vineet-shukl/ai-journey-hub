@@ -123,18 +123,33 @@ export function Dashboard({ overallProgress, weekProgress, onContinueLearning }:
           rel="noopener noreferrer"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.4 }}
-          className="mt-6 flex items-center gap-4 p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-all duration-300 group cursor-pointer"
+          whileHover={{ 
+            y: -4, 
+            scale: 1.01,
+            boxShadow: "0 12px 30px -8px hsl(var(--primary) / 0.25)"
+          }}
+          transition={{ 
+            delay: 0.5, 
+            duration: 0.4,
+            y: { duration: 0.2 },
+            scale: { duration: 0.2 },
+            boxShadow: { duration: 0.2 }
+          }}
+          className="mt-6 flex items-center gap-4 p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-colors duration-300 group cursor-pointer"
         >
-          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#0088cc] to-[#00a2e8]">
+          <motion.div 
+            className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#0088cc] to-[#00a2e8] shadow-lg"
+            whileHover={{ rotate: [0, -10, 10, 0] }}
+            transition={{ duration: 0.4 }}
+          >
             <Send className="w-6 h-6 text-white" />
-          </div>
+          </motion.div>
           <div className="flex-1">
             <h3 className="font-semibold text-foreground flex items-center gap-2">
               CampusX DSMP Community
               <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80 transition-colors">
               Join for free video resources, session recordings, interview prep & community support on Data Science & ML
             </p>
           </div>
