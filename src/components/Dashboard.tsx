@@ -135,16 +135,47 @@ export function Dashboard({ overallProgress, weekProgress, onContinueLearning }:
             scale: { duration: 0.2 },
             boxShadow: { duration: 0.2 }
           }}
-          className="mt-6 flex items-center gap-4 p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-colors duration-300 group cursor-pointer"
+          className="mt-6 flex items-center gap-4 p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-colors duration-300 group cursor-pointer relative overflow-hidden"
         >
+          {/* Pulse ring animation for attention */}
+          <motion.div
+            className="absolute inset-0 rounded-xl border-2 border-primary/40"
+            initial={{ opacity: 0.8, scale: 1 }}
+            animate={{ 
+              opacity: [0.6, 0, 0.6],
+              scale: [1, 1.02, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: 3,
+              repeatType: "loop",
+              delay: 1,
+            }}
+          />
+          
           <motion.div 
-            className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#0088cc] to-[#00a2e8] shadow-lg"
+            className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#0088cc] to-[#00a2e8] shadow-lg relative z-10"
             whileHover={{ rotate: [0, -10, 10, 0] }}
             transition={{ duration: 0.4 }}
           >
-            <Send className="w-6 h-6 text-white" />
+            {/* Pulse glow behind icon */}
+            <motion.div
+              className="absolute inset-0 rounded-full bg-[#0088cc]"
+              initial={{ opacity: 0.5, scale: 1 }}
+              animate={{ 
+                opacity: [0.5, 0, 0.5],
+                scale: [1, 1.5, 1],
+              }}
+              transition={{
+                duration: 2,
+                repeat: 3,
+                repeatType: "loop",
+                delay: 1,
+              }}
+            />
+            <Send className="w-6 h-6 text-white relative z-10" />
           </motion.div>
-          <div className="flex-1">
+          <div className="flex-1 relative z-10">
             <h3 className="font-semibold text-foreground flex items-center gap-2">
               CampusX DSMP Community
               <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
