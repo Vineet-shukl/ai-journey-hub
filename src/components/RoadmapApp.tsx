@@ -70,7 +70,7 @@ export function RoadmapApp() {
             animate={{ opacity: 1, x: 0 }}
             className="flex items-center gap-3"
           >
-            <img src={logoImage} alt="AI/ML Roadmap" className="w-10 h-10 md:w-12 md:h-12" />
+            <img src={logoImage} alt="AI/ML Roadmap" className="w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-primary/50" />
             <h1 className="text-2xl md:text-3xl font-bold glow-text bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
               AI/ML Roadmap
             </h1>
