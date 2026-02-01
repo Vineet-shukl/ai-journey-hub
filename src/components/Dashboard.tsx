@@ -1,7 +1,8 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Brain, Sparkles, Zap } from 'lucide-react';
+import { ArrowRight, Brain, ExternalLink, Sparkles, Zap } from 'lucide-react';
 import { ProgressBar } from './ProgressBar';
 import { Button } from '@/components/ui/button';
+import { Send } from 'lucide-react';
 
 interface DashboardProps {
   overallProgress: number;
@@ -114,6 +115,30 @@ export function Dashboard({ overallProgress, weekProgress, onContinueLearning }:
             </motion.div>
           ))}
         </div>
+
+        {/* Telegram Community Card */}
+        <motion.a
+          href="https://t.me/campusxdsmp1_0"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.4 }}
+          className="mt-6 flex items-center gap-4 p-4 rounded-xl border border-primary/20 bg-primary/5 hover:bg-primary/10 transition-all duration-300 group cursor-pointer"
+        >
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#0088cc] to-[#00a2e8]">
+            <Send className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-foreground flex items-center gap-2">
+              CampusX DSMP Community
+              <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              Join for free video resources, session recordings, interview prep & community support on Data Science & ML
+            </p>
+          </div>
+        </motion.a>
       </div>
     </motion.header>
   );
