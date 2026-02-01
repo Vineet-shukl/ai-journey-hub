@@ -1,8 +1,7 @@
 import { motion } from 'framer-motion';
-import { ArrowRight, Brain, ExternalLink, Sparkles, Zap } from 'lucide-react';
+import { ArrowRight, Brain, ExternalLink, Sparkles, Zap, Send, Code2 } from 'lucide-react';
 import { ProgressBar } from './ProgressBar';
 import { Button } from '@/components/ui/button';
-import { Send } from 'lucide-react';
 
 interface DashboardProps {
   overallProgress: number;
@@ -182,6 +181,41 @@ export function Dashboard({ overallProgress, weekProgress, onContinueLearning }:
             </h3>
             <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80 transition-colors">
               Join for free video resources, session recordings, interview prep & community support on Data Science & ML
+            </p>
+          </div>
+        </motion.a>
+
+        {/* Google Colab Card */}
+        <motion.a
+          href="https://colab.research.google.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ 
+            y: -4, 
+            scale: 1.01,
+            boxShadow: "0 12px 30px -8px hsl(var(--primary) / 0.25)"
+          }}
+          transition={{ 
+            delay: 0.6, 
+            duration: 0.4,
+            y: { duration: 0.2 },
+            scale: { duration: 0.2 },
+            boxShadow: { duration: 0.2 }
+          }}
+          className="mt-4 flex items-center gap-4 p-4 rounded-xl border border-orange-500/20 bg-orange-500/5 hover:bg-orange-500/10 hover:border-orange-500/40 transition-colors duration-300 group cursor-pointer"
+        >
+          <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-[#F9AB00] to-[#E37400] shadow-lg">
+            <Code2 className="w-6 h-6 text-white" />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-semibold text-foreground flex items-center gap-2">
+              Google Colab
+              <ExternalLink className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+            </h3>
+            <p className="text-sm text-muted-foreground group-hover:text-muted-foreground/80 transition-colors">
+              Use this free cloud platform to run your AI & ML programs — no setup required, just code and learn!
             </p>
           </div>
         </motion.a>
