@@ -7,7 +7,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
 import { lovable } from '@/integrations/lovable';
+import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+
+// Check if running on Lovable domain
+const isLovableDomain = () => {
+  const hostname = window.location.hostname;
+  return hostname.includes('lovable.app') || hostname.includes('lovableproject.com');
+};
 
 export default function Login() {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -42,11 +49,32 @@ export default function Login() {
 
   const handleGoogleSignIn = async () => {
     setIsGoogleLoading(true);
-    const { error } = await lovable.auth.signInWithOAuth('google', {
-      redirect_uri: window.location.origin,
-    });
-    if (error) {
-      toast.error(error.message);
+    
+    try {
+      if (isLovableDomain()) {
+        // Use Lovable Cloud OAuth on Lovable domains
+        const { error } = await lovable.auth.signInWithOAuth('google', {
+          redirect_uri: window.location.origin,
+        });
+        if (error) {
+          toast.error(error.message);
+          setIsGoogleLoading(false);
+        }
+      } else {
+        // Use standard Supabase OAuth on external domains (like Vercel)
+        const { error } = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: window.location.origin,
+          },
+        });
+        if (error) {
+          toast.error(error.message);
+          setIsGoogleLoading(false);
+        }
+      }
+    } catch (err) {
+      toast.error('Failed to initiate Google sign in');
       setIsGoogleLoading(false);
     }
   };
