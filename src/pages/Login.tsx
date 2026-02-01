@@ -78,15 +78,7 @@ export default function Login() {
         }
         
         if (data?.url) {
-          // Validate OAuth URL before redirecting
-          const oauthUrl = new URL(data.url);
-          const allowedHosts = ['accounts.google.com'];
-          if (!allowedHosts.some(host => oauthUrl.hostname === host)) {
-            toast.error('Invalid OAuth redirect');
-            setIsGoogleLoading(false);
-            return;
-          }
-          // Manually redirect to Google OAuth
+          // Manually redirect to Supabase OAuth endpoint
           window.location.href = data.url;
         }
       }
