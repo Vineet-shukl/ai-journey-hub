@@ -1,6 +1,7 @@
 export interface SubTopic {
   id: string;
   title: string;
+  description?: string;
   resourceUrl?: string;
   completed: boolean;
 }

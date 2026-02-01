@@ -2,6 +2,12 @@ import { motion } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
 import { CustomCheckbox } from './CustomCheckbox';
 import { SubTopic } from '@/types/roadmap';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface SubTopicItemProps {
   subTopic: SubTopic;
@@ -48,24 +54,38 @@ export function SubTopicItem({ subTopic, isCompleted, onToggle, index }: SubTopi
       </div>
       
       {subTopic.resourceUrl && (
-        <motion.a
-          href={subTopic.resourceUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`
-            flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
-            transition-all duration-300
-            ${isCompleted
-              ? 'text-muted-foreground hover:text-foreground'
-              : 'text-primary hover:bg-primary/10'
-            }
-          `}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <span className="hidden sm:inline">Resources</span>
-          <ExternalLink className="w-3.5 h-3.5" />
-        </motion.a>
+        <TooltipProvider>
+          <Tooltip delayDuration={200}>
+            <TooltipTrigger asChild>
+              <motion.a
+                href={subTopic.resourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`
+                  flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium
+                  transition-all duration-300
+                  ${isCompleted
+                    ? 'text-muted-foreground hover:text-foreground'
+                    : 'text-primary hover:bg-primary/10'
+                  }
+                `}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="hidden sm:inline">Resources</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </motion.a>
+            </TooltipTrigger>
+            {subTopic.description && (
+              <TooltipContent 
+                side="top" 
+                className="max-w-xs text-center bg-popover border border-border shadow-lg"
+              >
+                <p className="text-sm">{subTopic.description}</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       )}
     </motion.div>
   );
