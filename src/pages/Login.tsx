@@ -62,15 +62,32 @@ export default function Login() {
         }
       } else {
         // Use standard Supabase OAuth on external domains (like Vercel)
-        const { error } = await supabase.auth.signInWithOAuth({
+        // Skip browser redirect to manually control where user goes
+        const { data, error } = await supabase.auth.signInWithOAuth({
           provider: 'google',
           options: {
             redirectTo: window.location.origin,
+            skipBrowserRedirect: true,
           },
         });
+        
         if (error) {
           toast.error(error.message);
           setIsGoogleLoading(false);
+          return;
+        }
+        
+        if (data?.url) {
+          // Validate OAuth URL before redirecting
+          const oauthUrl = new URL(data.url);
+          const allowedHosts = ['accounts.google.com'];
+          if (!allowedHosts.some(host => oauthUrl.hostname === host)) {
+            toast.error('Invalid OAuth redirect');
+            setIsGoogleLoading(false);
+            return;
+          }
+          // Manually redirect to Google OAuth
+          window.location.href = data.url;
         }
       }
     } catch (err) {
