@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Dashboard } from './Dashboard';
 import { WeekAccordion } from './WeekAccordion';
 import { LoadingScreen } from './LoadingScreen';
+import { UserMenu } from './UserMenu';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
 import { roadmapData } from '@/data/roadmapData';
 
@@ -58,6 +59,23 @@ export function RoadmapApp() {
       className="min-h-screen py-8 px-4 md:px-8 lg:px-12"
     >
       <div className="max-w-5xl mx-auto">
+        {/* Header with User Menu */}
+        <div className="flex items-center justify-between mb-8">
+          <motion.h1
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-2xl md:text-3xl font-bold glow-text bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+          >
+            AI/ML Roadmap
+          </motion.h1>
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+          >
+            <UserMenu />
+          </motion.div>
+        </div>
+
         <Dashboard
           overallProgress={progress.overallProgress}
           weekProgress={progress.weekProgress}
