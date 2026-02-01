@@ -1,24 +1,49 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Week, RoadmapProgress } from '@/types/roadmap';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 
 const STORAGE_KEY = 'ai-ml-roadmap-progress';
 
 export function useRoadmapProgress(initialWeeks: Week[]) {
-  // Load completed subtopics from localStorage
-  const loadCompletedFromStorage = (): Set<string> => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        return new Set(JSON.parse(stored));
-      }
-    } catch (e) {
-      console.error('Failed to load progress from storage', e);
-    }
-    return new Set();
-  };
-
-  const [completedSubTopics, setCompletedSubTopics] = useState<Set<string>>(loadCompletedFromStorage);
+  const { user } = useAuth();
+  const [completedSubTopics, setCompletedSubTopics] = useState<Set<string>>(new Set());
   const [weeks, setWeeks] = useState<Week[]>(initialWeeks);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load progress from database or localStorage
+  useEffect(() => {
+    const loadProgress = async () => {
+      setIsLoading(true);
+
+      if (user) {
+        // Load from database for authenticated users
+        const { data, error } = await supabase
+          .from('learning_progress')
+          .select('subtopic_id')
+          .eq('user_id', user.id)
+          .eq('completed', true);
+
+        if (!error && data) {
+          setCompletedSubTopics(new Set(data.map((item) => item.subtopic_id)));
+        }
+      } else {
+        // Fall back to localStorage for anonymous users
+        try {
+          const stored = localStorage.getItem(STORAGE_KEY);
+          if (stored) {
+            setCompletedSubTopics(new Set(JSON.parse(stored)));
+          }
+        } catch (e) {
+          console.error('Failed to load progress from storage', e);
+        }
+      }
+
+      setIsLoading(false);
+    };
+
+    loadProgress();
+  }, [user]);
 
   // Calculate progress for each week
   const calculateProgress = useMemo((): RoadmapProgress => {
@@ -50,21 +75,59 @@ export function useRoadmapProgress(initialWeeks: Week[]) {
   }, [weeks, completedSubTopics]);
 
   // Toggle subtopic completion (optimistic update)
-  const toggleSubTopic = useCallback((subTopicId: string) => {
-    setCompletedSubTopics((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(subTopicId)) {
-        newSet.delete(subTopicId);
+  const toggleSubTopic = useCallback(
+    async (subTopicId: string) => {
+      const isCompleted = completedSubTopics.has(subTopicId);
+
+      // Optimistic update
+      setCompletedSubTopics((prev) => {
+        const newSet = new Set(prev);
+        if (isCompleted) {
+          newSet.delete(subTopicId);
+        } else {
+          newSet.add(subTopicId);
+        }
+        return newSet;
+      });
+
+      if (user) {
+        // Sync with database for authenticated users
+        if (isCompleted) {
+          // Delete the progress record
+          await supabase
+            .from('learning_progress')
+            .delete()
+            .eq('user_id', user.id)
+            .eq('subtopic_id', subTopicId);
+        } else {
+          // Insert or update the progress record
+          await supabase
+            .from('learning_progress')
+            .upsert({
+              user_id: user.id,
+              subtopic_id: subTopicId,
+              completed: true,
+              completed_at: new Date().toISOString(),
+            }, {
+              onConflict: 'user_id,subtopic_id',
+            });
+        }
       } else {
-        newSet.add(subTopicId);
+        // Save to localStorage for anonymous users
+        setCompletedSubTopics((prev) => {
+          const newSet = new Set(prev);
+          if (isCompleted) {
+            newSet.delete(subTopicId);
+          } else {
+            newSet.add(subTopicId);
+          }
+          localStorage.setItem(STORAGE_KEY, JSON.stringify([...newSet]));
+          return newSet;
+        });
       }
-      
-      // Save to localStorage
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([...newSet]));
-      
-      return newSet;
-    });
-  }, []);
+    },
+    [completedSubTopics, user]
+  );
 
   // Toggle week expansion
   const toggleWeekExpansion = useCallback((weekId: string) => {
@@ -102,5 +165,6 @@ export function useRoadmapProgress(initialWeeks: Week[]) {
     toggleWeekExpansion,
     findNextSubTopic,
     isCompleted,
+    isLoading,
   };
 }
