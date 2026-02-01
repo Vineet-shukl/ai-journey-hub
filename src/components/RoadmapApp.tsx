@@ -4,6 +4,7 @@ import { Dashboard } from './Dashboard';
 import { WeekAccordion } from './WeekAccordion';
 import { LoadingScreen } from './LoadingScreen';
 import { UserMenu } from './UserMenu';
+import { CosmicBackground } from './CosmicBackground';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
 import { roadmapData } from '@/data/roadmapData';
 
@@ -53,12 +54,14 @@ export function RoadmapApp() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      className="min-h-screen py-8 px-4 md:px-8 lg:px-12"
-    >
-      <div className="max-w-5xl mx-auto">
+    <>
+      <CosmicBackground />
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        className="relative min-h-screen py-8 px-4 md:px-8 lg:px-12"
+      >
+        <div className="max-w-5xl mx-auto">
         {/* Header with User Menu */}
         <div className="flex items-center justify-between mb-8">
           <motion.h1
@@ -117,5 +120,6 @@ export function RoadmapApp() {
         </footer>
       </div>
     </motion.div>
+    </>
   );
 }
