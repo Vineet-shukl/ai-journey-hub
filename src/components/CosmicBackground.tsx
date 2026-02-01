@@ -1,19 +1,21 @@
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 
 export function CosmicBackground() {
+  const prefersReducedMotion = useReducedMotion();
+
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
       {/* Base gradient */}
       <div className="absolute inset-0 bg-background" />
       
-      {/* Animated gradient orbs */}
+      {/* Gradient orbs - static when reduced motion preferred */}
       <motion.div
         className="absolute top-0 left-1/4 w-[800px] h-[800px] rounded-full opacity-30"
         style={{
           background: 'radial-gradient(circle, hsl(260 80% 60% / 0.3) 0%, transparent 70%)',
           filter: 'blur(80px)',
         }}
-        animate={{
+        animate={prefersReducedMotion ? {} : {
           x: [0, 50, 0],
           y: [0, 30, 0],
           scale: [1, 1.1, 1],
@@ -31,7 +33,7 @@ export function CosmicBackground() {
           background: 'radial-gradient(circle, hsl(190 95% 55% / 0.4) 0%, transparent 70%)',
           filter: 'blur(80px)',
         }}
-        animate={{
+        animate={prefersReducedMotion ? {} : {
           x: [0, -40, 0],
           y: [0, -50, 0],
           scale: [1, 1.15, 1],
@@ -49,7 +51,7 @@ export function CosmicBackground() {
           background: 'radial-gradient(circle, hsl(290 85% 55% / 0.25) 0%, transparent 60%)',
           filter: 'blur(100px)',
         }}
-        animate={{
+        animate={prefersReducedMotion ? {} : {
           scale: [1, 1.2, 1],
           rotate: [0, 180, 360],
         }}
@@ -72,8 +74,8 @@ export function CosmicBackground() {
         }}
       />
 
-      {/* Floating particles */}
-      {[...Array(20)].map((_, i) => (
+      {/* Floating particles - hidden when reduced motion preferred */}
+      {!prefersReducedMotion && [...Array(20)].map((_, i) => (
         <motion.div
           key={i}
           className="absolute w-1 h-1 rounded-full bg-primary/40"
@@ -95,7 +97,7 @@ export function CosmicBackground() {
         />
       ))}
 
-      {/* Larger floating orbs */}
+      {/* Larger floating orbs - static when reduced motion preferred */}
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={`orb-${i}`}
@@ -110,7 +112,7 @@ export function CosmicBackground() {
               ? '0 0 20px hsl(var(--primary) / 0.4)' 
               : '0 0 20px hsl(var(--secondary) / 0.4)',
           }}
-          animate={{
+          animate={prefersReducedMotion ? {} : {
             y: [0, -50, 0],
             x: [0, 20, 0],
             opacity: [0.3, 0.7, 0.3],
