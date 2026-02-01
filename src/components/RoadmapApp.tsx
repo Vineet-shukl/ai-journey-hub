@@ -7,6 +7,7 @@ import { UserMenu } from './UserMenu';
 import { CosmicBackground } from './CosmicBackground';
 import { useRoadmapProgress } from '@/hooks/useRoadmapProgress';
 import { roadmapData } from '@/data/roadmapData';
+import logoImage from '@/assets/logo.png';
 
 export function RoadmapApp() {
   const [isLoading, setIsLoading] = useState(true);
@@ -64,13 +65,16 @@ export function RoadmapApp() {
         <div className="max-w-5xl mx-auto">
         {/* Header with User Menu */}
         <div className="flex items-center justify-between mb-8">
-          <motion.h1
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-2xl md:text-3xl font-bold glow-text bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent"
+            className="flex items-center gap-3"
           >
-            AI/ML Roadmap
-          </motion.h1>
+            <img src={logoImage} alt="AI/ML Roadmap" className="w-10 h-10 md:w-12 md:h-12" />
+            <h1 className="text-2xl md:text-3xl font-bold glow-text bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              AI/ML Roadmap
+            </h1>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
