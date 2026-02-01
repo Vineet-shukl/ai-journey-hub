@@ -15,7 +15,7 @@ export const roadmapData: Week[] = [
           { id: "w1-t1-s1", title: "Variables, Data Types & Operators", resourceUrl: "https://www.kaggle.com/learn/python", completed: false },
           { id: "w1-t1-s2", title: "Control Flow & Functions", resourceUrl: "https://www.kaggle.com/learn/python", completed: false },
           { id: "w1-t1-s3", title: "Lists, Dictionaries & Sets", resourceUrl: "https://www.kaggle.com/learn/python", completed: false },
-          { id: "w1-t1-s4", title: "Object-Oriented Programming", resourceUrl: "https://www.youtube.com/watch?v=JeznW_7DlB0", completed: false },
+          { id: "w1-t1-s4", title: "Object-Oriented Programming", resourceUrl: "https://docs.python.org/3/tutorial/classes.html", completed: false },
         ],
       },
       {
